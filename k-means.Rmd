@@ -1,0 +1,155 @@
+---
+title: "kmeans"
+author: "ziyingPeng"
+date: '2022-11-30'
+output: html_document
+---
+```{r}
+# Installing Packages
+install.packages("ClusterR")
+install.packages("cluster")
+
+# Loading package
+library(ClusterR)
+library(cluster)
+library(ISLR)
+data(Caravan)
+head(Caravan)
+
+```
+```{r}
+data(NCI60)
+```
+
+```{r}
+standardized.X=scale(Caravan[,-86])
+var(Caravan[ ,1])
+var(Caravan[ ,2])
+var(standardized.X[,1])
+var(standardized.X[,2])
+test=1:1000
+train.X= standardized.X[-test ,]
+test.X= standardized.X[test ,]
+
+```
+```{r}
+set.seed(240) # Setting seed
+kmeans.re <- kmeans(test.X, centers = 3, nstart = 20)#the x's variable, centers normally set to 3, from the 20th begin***
+kmeans.re
+```
+
+
+```{r}
+# Removing initial label of
+# Species from original dataset
+Caravan_1 <- Caravan[, -86]#remove the response variable the 86th column 
+
+# Fitting K-Means clustering Model
+# to training dataset
+set.seed(240) # Setting seed
+kmeans.re <- kmeans(Caravan_1, centers = 3, nstart = 20)#the x's variable, centers normally set to 3, from the 20th begin***
+kmeans.re
+
+# Cluster identification for
+# each observation
+kmeans.re$cluster
+
+# Confusion Matrix
+cm <- table(Caravan$Purchase, kmeans.re$cluster)
+cm  #test the accurecy 
+
+# Model Evaluation and visualization
+plot(Caravan_1[c("MOSTYPE", "MOSHOOFD")])
+plot(Caravan_1[c("MOSTYPE", "MOSHOOFD")],
+     col = kmeans.re$cluster)
+plot(Caravan_1[c("MOSTYPE", "MOSHOOFD")],
+     col = kmeans.re$cluster,
+     main = "K-means with 3 clusters")
+
+## Plotiing cluster centers
+kmeans.re$centers
+kmeans.re$centers[, c("MOSTYPE", "MOSHOOFD")]
+
+# cex is font size, pch is symbol
+points(kmeans.re$centers[, c("MOSTYPE", "MOSHOOFD")],
+       col = 1:3, pch = 8, cex = 3)
+
+## Visualizing clusters
+y_kmeans <- kmeans.re$cluster
+clusplot(Caravan_1[, c("MOSTYPE", "MOSHOOFD")],
+         y_kmeans,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste("Cluster Caravan"),
+         xlab = 'MOSTYPE',
+         ylab = 'MOSHOOFD')
+
+```
+```{r}
+
+# Removing initial label of
+# Species from original dataset
+Caravan_1 <- Caravan[, -86]#remove the response variable the 86th column 
+
+# Fitting K-Means clustering Model
+# to training dataset
+set.seed(240) # Setting seed
+kmeans.re <- kmeans(Caravan_1, 3, nstart = 100)#the x's variable, centers normally set to 3, from the 20th begin***
+kmeans.re
+
+# Cluster identification for
+# each observation
+kmeans.re$cluster
+
+# Confusion Matrix
+cm <- table(Caravan$Purchase, kmeans.re$cluster)
+cm  #test the accurecy 
+
+# Model Evaluation and visualization
+plot(Caravan_1[c("MOSTYPE", "MOSHOOFD")])
+plot(Caravan_1[c("MOSTYPE", "MOSHOOFD")],
+     col = kmeans.re$cluster)
+plot(Caravan_1[c("MOSTYPE", "MOSHOOFD")],
+     col = kmeans.re$cluster,
+     main = "K-means with 3 clusters")
+
+## Plotiing cluster centers
+kmeans.re$centers
+kmeans.re$centers[, c("MOSTYPE", "MOSHOOFD")]
+
+# cex is font size, pch is symbol
+points(kmeans.re$centers[, c("MOSTYPE", "MOSHOOFD")],
+       col = 1:3, pch = 8, cex = 3)
+
+## Visualizing clusters
+y_kmeans <- kmeans.re$cluster
+clusplot(Caravan_1[, c("MOSTYPE", "MOSHOOFD")],
+         y_kmeans,
+         lines = 0,
+         shade = TRUE,
+         color = TRUE,
+         labels = 2,
+         plotchar = FALSE,
+         span = TRUE,
+         main = paste("Cluster Caravan"),
+         xlab = 'MOSTYPE',
+         ylab = 'MOSHOOFD')
+
+```
+```
+```{r}
+ set.seed(2)
+x=matrix(rnorm (50*2), ncol=2)
+x[1:25,1]=x[1:25,1]+3
+x[1:25,2]=x[1:25,2]-4
+ km.out=kmeans (x,2, nstart =20)
+ plot(x, col=(km.out$cluster +1), main="K-Means Clustering
+Results with K=2", xlab="", ylab="", pch=20, cex=2)
+```
+
+
+
